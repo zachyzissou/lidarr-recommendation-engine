@@ -5,6 +5,7 @@ using Lidarr.Recommendations.Services;
 using Lidarr.Recommendations.Services.Providers;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using Xunit;
 
 namespace Lidarr.Recommendations.Tests;
 

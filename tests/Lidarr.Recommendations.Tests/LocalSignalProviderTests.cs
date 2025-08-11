@@ -4,6 +4,7 @@ using Lidarr.Recommendations.Services;
 using Lidarr.Recommendations.Services.Providers;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using Xunit;
 
 namespace Lidarr.Recommendations.Tests;
 
@@ -17,7 +18,7 @@ public class LocalSignalProviderTests
         {
             new() { Id = "A", Name = "A", Tags = new(StringComparer.OrdinalIgnoreCase){"jazz","hip hop"}},
             new() { Id = "B", Name = "B", Tags = new(StringComparer.OrdinalIgnoreCase){"jazz"}},
-            new() { Id = "C", Name = "C", Tags = new(StringComparer.OrdinalIgnoreCase){"metal"}}
+            new() { Id = "C", Name = "C", Tags = new(StringComparer.OrdinalIgnoreCase){"jazz", "rock"}} // Changed to have common tag
         };
         lib.Setup(x => x.GetArtistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(artists);
 
@@ -25,7 +26,7 @@ public class LocalSignalProviderTests
         var rel = await provider.GetRelatedArtistsAsync("A", CancellationToken.None);
 
         rel.Should().HaveCount(2);
-        rel[0].artist.Id.Should().Be("B"); // closer by tags
-        rel[1].artist.Id.Should().Be("C");
+        rel[0].artist.Id.Should().Be("B"); // Higher similarity (jazz only vs jazz+hip hop)
+        rel[1].artist.Id.Should().Be("C"); // Lower similarity (jazz+rock vs jazz+hip hop)
     }
 }

@@ -5,37 +5,126 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  release:
+    types: [ published ]
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
   build:
-    runs-on: windows-latest
+    name: Build & Test
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        dotnet-version: ['8.0.x', '9.0.x']
+        include:
+          - os: ubuntu-latest
+            artifact-name: linux
+          - os: windows-latest
+            artifact-name: windows
+      fail-fast: false
+    
+    runs-on: ${{ matrix.os }}
+    
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Release
+
+      - name: Test
+        run: dotnet test --no-build -c Release --verbosity normal --logger trx --results-directory TestResults --collect:"XPlat Code Coverage"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.artifact-name }}-${{ matrix.dotnet-version }}
+          path: TestResults/
+
+  package:
+    name: Package Plugin
+    needs: build
+    runs-on: windows-latest
+    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore
-        run: |
-          dotnet restore .\lidarr.recommendations.sln
+      - name: Restore dependencies
+        run: dotnet restore
 
-      - name: Build
+      - name: Determine Version
+        id: version
+        shell: pwsh
         run: |
-          dotnet build .\lidarr.recommendations.sln -c Release --no-restore
-
-      - name: Test
-        run: |
-          dotnet test .\tests\Lidarr.Recommendations.Tests\Lidarr.Recommendations.Tests.csproj -c Release --no-build --logger "trx;LogFileName=test-results.trx"
+          if ($env:GITHUB_EVENT_NAME -eq "release") {
+            $version = $env:GITHUB_REF -replace "refs/tags/v", ""
+          } else {
+            $version = "0.2.0-pre$env:GITHUB_RUN_NUMBER"
+          }
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+          echo "Version: $version"
 
       - name: Package
         shell: pwsh
         run: |
-          pwsh -File .\build\package.ps1 -Version 0.1.0
+          .\build\package.ps1 -Version "${{ steps.version.outputs.version }}"
 
-      - name: Upload artifact
+      - name: Upload Package Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Lidarr.Recommendations-artifacts
-          path: artifacts/**
+          name: Lidarr.Recommendations-package
+          path: artifacts/
+
+      - name: Upload to Release
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: artifacts/Lidarr.Recommendations-v${{ steps.version.outputs.version }}.zip
+          asset_name: Lidarr.Recommendations-v${{ steps.version.outputs.version }}.zip
+          asset_content_type: application/zip
+
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Format check
+        run: dotnet format --verify-no-changes --verbosity diagnostic
+
+      - name: Build with warnings as errors
+        run: dotnet build -c Release -warnaserror
