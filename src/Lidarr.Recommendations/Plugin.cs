@@ -19,7 +19,11 @@ public sealed class Plugin /* : IPlugin (adapt to real SDK) */
     private IServiceProvider? _provider;
 
     public string Id => "lidarr.recommendations";
+    
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1822:Mark members as static", Justification = "Plugin contract requires instance members")]
     public string Name => "Lidarr.Recommendations";
+    
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1822:Mark members as static", Justification = "Plugin contract requires instance members")]
     public Version Version => Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0,1,0,0);
 
     // Called by host to register services
@@ -28,7 +32,6 @@ public sealed class Plugin /* : IPlugin (adapt to real SDK) */
         services.AddOptions<PluginSettings>();
         services.AddSingleton<IMemoryCacheService, MemoryCacheService>();
         services.AddSingleton<ILibraryAdapter, LibraryAdapter>();
-        services.AddSingleton<FeatureEngineer>();
         services.AddSingleton<RecommendationEngine>();
         services.AddSingleton<IRecommendationSignalProvider, LocalSignalProvider>();
         services.AddSingleton<ListenBrainzProvider>();
