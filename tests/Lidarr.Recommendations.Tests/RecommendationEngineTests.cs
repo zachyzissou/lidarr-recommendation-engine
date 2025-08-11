@@ -18,7 +18,7 @@ public class RecommendationEngineTests
         lib.Setup(x => x.GetArtistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new List<ArtistProfile>());
         lib.Setup(x => x.GetOwnedArtistIdsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new HashSet<string>());
 
-        var local = new LocalSignalProvider(lib.Object, null!, NullLogger<LocalSignalProvider>.Instance);
+        var local = new LocalSignalProvider(lib.Object, NullLogger<LocalSignalProvider>.Instance);
         var engine = new RecommendationEngine(lib.Object, local,
             new ListenBrainzProvider(NullLogger<ListenBrainzProvider>.Instance),
             new MusicBrainzProvider(NullLogger<MusicBrainzProvider>.Instance),

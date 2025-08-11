@@ -1,4 +1,4 @@
-// Placeholder: Only enable if SDK exposes an indexer extension point to third-party plugins.
+﻿// Placeholder: Only enable if SDK exposes an indexer extension point to third-party plugins.
 // Implementation will be added when the Lidarr SDK provides the necessary interfaces.
 
 // Empty namespace is intentional - this file serves as a placeholder

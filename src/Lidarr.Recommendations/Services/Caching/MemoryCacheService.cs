@@ -7,7 +7,10 @@ public sealed class MemoryCacheService : IMemoryCacheService, IDisposable
     private readonly MemoryCache _cache = new(new MemoryCacheOptions());
 
     public ValueTask<T> GetOrCreateAsync<T>(string key, Func<CancellationToken, Task<T>> factory, TimeSpan ttl, CancellationToken ct)
-        => new(GetOrCreateInternalAsync(key, factory, ttl, ct));
+    {
+        ArgumentNullException.ThrowIfNull(factory);
+        return new(GetOrCreateInternalAsync(key, factory, ttl, ct));
+    }
 
     private async Task<T> GetOrCreateInternalAsync<T>(string key, Func<CancellationToken, Task<T>> factory, TimeSpan ttl, CancellationToken ct)
     {
@@ -21,7 +24,7 @@ public sealed class MemoryCacheService : IMemoryCacheService, IDisposable
         {
             AbsoluteExpirationRelativeToNow = ttl
         });
-        return (T)value!;
+        return value!;
     }
 
     public void Remove(string key) => _cache.Remove(key);

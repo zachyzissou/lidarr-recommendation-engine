@@ -8,6 +8,10 @@ namespace Lidarr.Recommendations.Services;
 
 public sealed class RecommendationEngine
 {
+    private static readonly string[] ArtistActions = { "Add Artist", "View on MB" };
+    private static readonly string[] AlbumActions = { "Add Album", "Add to Wanted" };
+    private static readonly string[] UpcomingActions = { "Add to Wanted", "View on MB" };
+
     private readonly ILibraryAdapter _library;
     private readonly IRecommendationSignalProvider _localProvider;
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "S4487:Unread private fields should be removed", Justification = "Will be used when external provider integrations are implemented")]
@@ -32,6 +36,8 @@ public sealed class RecommendationEngine
 
     public Task PrimeAsync(PluginSettings settings, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(settings);
+
         // No-op for now; placeholder for cache prime
         _logger.LogInformation("RecommendationEngine: prime called (OfflineOnly={Offline})", settings.OfflineOnly);
         return Task.CompletedTask;
@@ -62,7 +68,7 @@ public sealed class RecommendationEngine
                     Type = RecommendationType.SimilarArtist,
                     Score = score,
                     Reason = reason,
-                    SuggestedActions = new[] { "Add Artist", "View on MB" }
+                    SuggestedActions = ArtistActions
                 });
             }
         }
@@ -100,7 +106,7 @@ public sealed class RecommendationEngine
                     Type = RecommendationType.AlbumGap,
                     Score = 0.5,
                     Reason = new Reason { Summary = $"Missing album by {artist.Name}" },
-                    SuggestedActions = new[] { "Add Album", "Add to Wanted" }
+                    SuggestedActions = AlbumActions
                 });
             }
         }
@@ -131,7 +137,7 @@ public sealed class RecommendationEngine
                     Type = RecommendationType.NewOrUpcoming,
                     Score = 0.6,
                     Reason = new Reason { Summary = $"Upcoming release for {artist.Name}" },
-                    SuggestedActions = new[] { "Add to Wanted", "View on MB" }
+                    SuggestedActions = UpcomingActions
                 });
             }
         }

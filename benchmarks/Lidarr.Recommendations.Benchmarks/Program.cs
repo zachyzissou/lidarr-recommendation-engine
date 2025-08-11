@@ -25,7 +25,7 @@ public class RecommendationPipelineBenchmarks
         _artists10k = TestData.CreateLargeTestLibrary(10000);
 
         var lib = new Mock<ILibraryAdapter>();
-        _provider = new LocalSignalProvider(lib.Object, null!, NullLogger<LocalSignalProvider>.Instance);
+        _provider = new LocalSignalProvider(lib.Object, NullLogger<LocalSignalProvider>.Instance);
     }
 
     [Benchmark]
@@ -94,7 +94,7 @@ public class RecommendationPipelineBenchmarks
         var lib = new Mock<ILibraryAdapter>();
         lib.Setup(x => x.GetArtistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(artists);
 
-        var provider = new LocalSignalProvider(lib.Object, null!, NullLogger<LocalSignalProvider>.Instance);
+        var provider = new LocalSignalProvider(lib.Object, NullLogger<LocalSignalProvider>.Instance);
         var seedArtist = artists.First();
 
         var results = await provider.GetRelatedArtistsAsync(seedArtist.Id, CancellationToken.None).ConfigureAwait(false);
@@ -117,7 +117,7 @@ public class RecommendationPipelineBenchmarks
         lib.Setup(x => x.GetArtistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(artists);
         lib.Setup(x => x.GetOwnedArtistIdsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new HashSet<string>());
 
-        var localProvider = new LocalSignalProvider(lib.Object, null!, NullLogger<LocalSignalProvider>.Instance);
+        var localProvider = new LocalSignalProvider(lib.Object, NullLogger<LocalSignalProvider>.Instance);
         var engine = new RecommendationEngine(
             lib.Object,
             localProvider,

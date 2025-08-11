@@ -32,6 +32,7 @@ public sealed class Plugin /* : IPlugin (adapt to real SDK) */
 
     // Called by host to register services
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2325:Methods and properties that don't access instance data should be static", Justification = "Plugin contract requires instance methods")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1822:Mark members as static", Justification = "Plugin contract requires instance methods")]
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddOptions<PluginSettings>();
@@ -59,10 +60,12 @@ public sealed class Plugin /* : IPlugin (adapt to real SDK) */
                 var engine = _provider.GetRequiredService<RecommendationEngine>();
                 await engine.PrimeAsync(settings.Value, CancellationToken.None).ConfigureAwait(false);
             }
+#pragma warning disable CA1031 // General exception catch is acceptable for non-critical warmup operation
             catch (Exception ex)
             {
                 _logger.LogDebug(ex, "Warm-up failed (non-fatal).");
             }
+#pragma warning restore CA1031
         });
     }
 

@@ -22,7 +22,7 @@ public class LocalSignalProviderTests
         };
         lib.Setup(x => x.GetArtistsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(artists);
 
-        var provider = new LocalSignalProvider(lib.Object, null!, NullLogger<LocalSignalProvider>.Instance);
+        var provider = new LocalSignalProvider(lib.Object, NullLogger<LocalSignalProvider>.Instance);
         var rel = await provider.GetRelatedArtistsAsync("A", CancellationToken.None);
 
         rel.Should().HaveCount(2);
