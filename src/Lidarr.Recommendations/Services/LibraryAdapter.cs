@@ -1,4 +1,4 @@
-using Lidarr.Recommendations.Domain;
+﻿using Lidarr.Recommendations.Domain;
 using Microsoft.Extensions.Logging;
 
 namespace Lidarr.Recommendations.Services;
@@ -14,8 +14,8 @@ public sealed class LibraryAdapter : ILibraryAdapter
 
     public Task<IReadOnlyList<ArtistProfile>> GetArtistsAsync(CancellationToken ct)
     {
-        // TODO: Implement via Lidarr plugin SDK (query artists, tags, relations).
-        // Baseline: return minimal set to ensure engine doesn't fail.
+        // Implementation pending: will integrate with Lidarr SDK to query artists, tags, and relations.
+        // Currently returns empty collection until SDK interfaces are available.
         _logger.LogDebug("GetArtistsAsync: using baseline stub");
         return Task.FromResult<IReadOnlyList<ArtistProfile>>(Array.Empty<ArtistProfile>());
     }

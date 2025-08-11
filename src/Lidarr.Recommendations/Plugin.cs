@@ -1,11 +1,11 @@
-using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using System.Reflection;
 using Lidarr.Recommendations.Config;
 using Lidarr.Recommendations.Services;
 using Lidarr.Recommendations.Services.Caching;
 using Lidarr.Recommendations.Services.Providers;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 // NOTE: This entry type shape follows a pragmatic IPlugin-style contract.
 // Lidarr plugins branch may expose a different entrypoint signature. If so,
@@ -18,17 +18,26 @@ public sealed class Plugin /* : IPlugin (adapt to real SDK) */
     private ILogger? _logger;
     private IServiceProvider? _provider;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1822:Mark members as static", Justification = "Plugin contract requires instance members")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2325:Methods and properties that don't access instance data should be static", Justification = "Plugin contract requires instance members")]
     public string Id => "lidarr.recommendations";
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1822:Mark members as static", Justification = "Plugin contract requires instance members")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2325:Methods and properties that don't access instance data should be static", Justification = "Plugin contract requires instance members")]
     public string Name => "Lidarr.Recommendations";
-    public Version Version => Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0,1,0,0);
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1822:Mark members as static", Justification = "Plugin contract requires instance members")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2325:Methods and properties that don't access instance data should be static", Justification = "Plugin contract requires instance members")]
+    public Version Version => Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0, 1, 0, 0);
 
     // Called by host to register services
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S2325:Methods and properties that don't access instance data should be static", Justification = "Plugin contract requires instance methods")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1822:Mark members as static", Justification = "Plugin contract requires instance methods")]
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddOptions<PluginSettings>();
         services.AddSingleton<IMemoryCacheService, MemoryCacheService>();
         services.AddSingleton<ILibraryAdapter, LibraryAdapter>();
-        services.AddSingleton<FeatureEngineer>();
         services.AddSingleton<RecommendationEngine>();
         services.AddSingleton<IRecommendationSignalProvider, LocalSignalProvider>();
         services.AddSingleton<ListenBrainzProvider>();
@@ -49,12 +58,14 @@ public sealed class Plugin /* : IPlugin (adapt to real SDK) */
             try
             {
                 var engine = _provider.GetRequiredService<RecommendationEngine>();
-                await engine.PrimeAsync(settings.Value, CancellationToken.None);
+                await engine.PrimeAsync(settings.Value, CancellationToken.None).ConfigureAwait(false);
             }
+#pragma warning disable CA1031 // General exception catch is acceptable for non-critical warmup operation
             catch (Exception ex)
             {
                 _logger.LogDebug(ex, "Warm-up failed (non-fatal).");
             }
+#pragma warning restore CA1031
         });
     }
 
@@ -70,11 +81,11 @@ public sealed class Plugin /* : IPlugin (adapt to real SDK) */
         CancellationToken ct)
     {
         var engine = _provider!.GetRequiredService<RecommendationEngine>();
-        return kind?.ToLowerInvariant() switch
+        return kind?.ToUpperInvariant() switch
         {
-            "similar" => await engine.GetSimilarArtistsAsync(take ?? 50, ct),
-            "gaps" => await engine.GetAlbumGapsAsync(take ?? 50, ct),
-            "upcoming" => await engine.GetNewAndUpcomingAsync(take ?? 50, ct),
+            "SIMILAR" => await engine.GetSimilarArtistsAsync(take ?? 50, ct).ConfigureAwait(false),
+            "GAPS" => await engine.GetAlbumGapsAsync(take ?? 50, ct).ConfigureAwait(false),
+            "upcoming" => await engine.GetNewAndUpcomingAsync(take ?? 50, ct).ConfigureAwait(false),
             _ => Array.Empty<Domain.Recommendation>()
         };
     }

@@ -1,4 +1,4 @@
-namespace Lidarr.Recommendations.Domain;
+﻿namespace Lidarr.Recommendations.Domain;
 
 public sealed class AlbumProfile
 {

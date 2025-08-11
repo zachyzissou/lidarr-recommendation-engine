@@ -1,4 +1,4 @@
-namespace Lidarr.Recommendations.Config;
+﻿namespace Lidarr.Recommendations.Config;
 
 public sealed class ScoreWeights
 {

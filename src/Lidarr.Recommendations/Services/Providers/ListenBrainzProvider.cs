@@ -1,4 +1,4 @@
-using Lidarr.Recommendations.Domain;
+﻿using Lidarr.Recommendations.Domain;
 using Microsoft.Extensions.Logging;
 
 namespace Lidarr.Recommendations.Services.Providers;
