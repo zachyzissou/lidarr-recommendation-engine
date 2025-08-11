@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Lidarr.Recommendations.Domain;
 using Lidarr.Recommendations.Services;
 using Lidarr.Recommendations.Services.Providers;

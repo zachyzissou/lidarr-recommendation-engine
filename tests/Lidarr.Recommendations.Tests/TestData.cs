@@ -1,4 +1,4 @@
-using Lidarr.Recommendations.Domain;
+﻿using Lidarr.Recommendations.Domain;
 
 namespace Lidarr.Recommendations.Tests;
 

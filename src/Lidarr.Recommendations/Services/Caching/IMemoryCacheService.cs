@@ -1,4 +1,4 @@
-namespace Lidarr.Recommendations.Services.Caching;
+﻿namespace Lidarr.Recommendations.Services.Caching;
 
 public interface IMemoryCacheService
 {

@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 
 namespace Lidarr.Recommendations.Services.Caching;
 
@@ -11,9 +11,12 @@ public sealed class MemoryCacheService : IMemoryCacheService, IDisposable
 
     private async Task<T> GetOrCreateInternalAsync<T>(string key, Func<CancellationToken, Task<T>> factory, TimeSpan ttl, CancellationToken ct)
     {
-        if (_cache.TryGetValue(key, out var existing) && existing is T t) return t;
+        if (_cache.TryGetValue(key, out var existing) && existing is T t)
+        {
+            return t;
+        }
 
-        var value = await factory(ct);
+        var value = await factory(ct).ConfigureAwait(false);
         _cache.Set(key, value!, new MemoryCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = ttl

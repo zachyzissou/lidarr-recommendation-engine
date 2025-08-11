@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Lidarr.Recommendations.Services;
 using Xunit;
 
@@ -42,7 +42,7 @@ public class FeatureEngineerTests
         vector.Should().HaveCount(2);
         vector.Should().ContainKey("tag:rock");
         vector.Should().ContainKey("tag:metal");
-        
+
         // Verify L2 normalization: sum of squares should be 1
         var sumOfSquares = vector.Values.Sum(v => v * v);
         sumOfSquares.Should().BeApproximately(1.0, 1e-10);

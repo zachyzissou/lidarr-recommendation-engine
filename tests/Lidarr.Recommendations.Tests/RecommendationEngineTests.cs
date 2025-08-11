@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Lidarr.Recommendations.Config;
 using Lidarr.Recommendations.Domain;
 using Lidarr.Recommendations.Services;
@@ -19,9 +19,9 @@ public class RecommendationEngineTests
         lib.Setup(x => x.GetOwnedArtistIdsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new HashSet<string>());
 
         var local = new LocalSignalProvider(lib.Object, null!, NullLogger<LocalSignalProvider>.Instance);
-        var engine = new RecommendationEngine(lib.Object, local, 
-            new ListenBrainzProvider(NullLogger<ListenBrainzProvider>.Instance), 
-            new MusicBrainzProvider(NullLogger<MusicBrainzProvider>.Instance), 
+        var engine = new RecommendationEngine(lib.Object, local,
+            new ListenBrainzProvider(NullLogger<ListenBrainzProvider>.Instance),
+            new MusicBrainzProvider(NullLogger<MusicBrainzProvider>.Instance),
             NullLogger<RecommendationEngine>.Instance);
 
         var results = await engine.GetSimilarArtistsAsync(10, CancellationToken.None);

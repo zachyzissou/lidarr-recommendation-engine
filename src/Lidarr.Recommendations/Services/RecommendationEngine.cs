@@ -1,4 +1,4 @@
-using Lidarr.Recommendations.Config;
+﻿using Lidarr.Recommendations.Config;
 using Lidarr.Recommendations.Domain;
 using Lidarr.Recommendations.Services.Providers;
 using Microsoft.Extensions.Logging;
@@ -10,7 +10,9 @@ public sealed class RecommendationEngine
 {
     private readonly ILibraryAdapter _library;
     private readonly IRecommendationSignalProvider _localProvider;
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "S4487:Unread private fields should be removed", Justification = "Will be used when external provider integrations are implemented")]
     private readonly ListenBrainzProvider _listenBrainzProvider;
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "S4487:Unread private fields should be removed", Justification = "Will be used when external provider integrations are implemented")]
     private readonly MusicBrainzProvider _musicBrainzProvider;
     private readonly ILogger<RecommendationEngine> _logger;
 
@@ -21,10 +23,10 @@ public sealed class RecommendationEngine
         MusicBrainzProvider musicBrainzProvider,
         ILogger<RecommendationEngine> logger)
     {
-        _library = library; 
-        _localProvider = localProvider; 
-        _listenBrainzProvider = listenBrainzProvider; 
-        _musicBrainzProvider = musicBrainzProvider; 
+        _library = library;
+        _localProvider = localProvider;
+        _listenBrainzProvider = listenBrainzProvider;
+        _musicBrainzProvider = musicBrainzProvider;
         _logger = logger;
     }
 
@@ -46,11 +48,11 @@ public sealed class RecommendationEngine
             var relatedArtists = await _localProvider.GetRelatedArtistsAsync(seedArtist.Id, cancellationToken).ConfigureAwait(false);
             foreach (var (artist, similarity) in relatedArtists)
             {
-                if (owned.Contains(artist.Id)) 
+                if (owned.Contains(artist.Id))
                 {
                     continue;
                 }
-                
+
                 var reason = new Reason { Summary = $"Similar to {seedArtist.Name}; tags overlap" };
                 var score = similarity; // baseline similarity
                 recommendations.Add(new Recommendation
@@ -77,19 +79,18 @@ public sealed class RecommendationEngine
     {
         var artists = await _library.GetArtistsAsync(cancellationToken).ConfigureAwait(false);
         var recommendations = new List<Recommendation>();
-        
+
         foreach (var artist in artists)
         {
             var albums = await _library.GetAlbumsByArtistAsync(artist.Id, cancellationToken).ConfigureAwait(false);
-            var ownedAlbums = albums.Where(x => x.IsOwned).Select(x => x.Id).ToHashSet();
-            
+
             foreach (var album in albums)
             {
-                if (album.IsOwned || album.IsLive || album.IsCompilation) 
+                if (album.IsOwned || album.IsLive || album.IsCompilation)
                 {
                     continue;
                 }
-                
+
                 recommendations.Add(new Recommendation
                 {
                     Id = album.Id,
@@ -110,17 +111,17 @@ public sealed class RecommendationEngine
     {
         var artists = await _library.GetArtistsAsync(cancellationToken).ConfigureAwait(false);
         var recommendations = new List<Recommendation>();
-        
+
         foreach (var artist in artists)
         {
             var albums = await _library.GetAlbumsByArtistAsync(artist.Id, cancellationToken).ConfigureAwait(false);
             foreach (var album in albums)
             {
-                if (!album.IsUpcoming) 
+                if (!album.IsUpcoming)
                 {
                     continue;
                 }
-                
+
                 recommendations.Add(new Recommendation
                 {
                     Id = album.Id,

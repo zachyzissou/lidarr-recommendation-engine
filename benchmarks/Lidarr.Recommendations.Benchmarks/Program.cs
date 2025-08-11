@@ -1,4 +1,4 @@
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using Lidarr.Recommendations.Services;
 using Lidarr.Recommendations.Services.Providers;
@@ -97,7 +97,7 @@ public class RecommendationPipelineBenchmarks
         var provider = new LocalSignalProvider(lib.Object, null!, NullLogger<LocalSignalProvider>.Instance);
         var seedArtist = artists.First();
 
-        var results = await provider.GetRelatedArtistsAsync(seedArtist.Id, CancellationToken.None);
+        var results = await provider.GetRelatedArtistsAsync(seedArtist.Id, CancellationToken.None).ConfigureAwait(false);
         return results.Count;
     }
 
@@ -126,7 +126,7 @@ public class RecommendationPipelineBenchmarks
             NullLogger<RecommendationEngine>.Instance
         );
 
-        var results = await engine.GetSimilarArtistsAsync(50, CancellationToken.None);
+        var results = await engine.GetSimilarArtistsAsync(50, CancellationToken.None).ConfigureAwait(false);
         return results.Count;
     }
 }
