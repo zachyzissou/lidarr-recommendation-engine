@@ -1,0 +1,10 @@
+{
+  "plugin.name": "Lidarr.Recommendations",
+  "discover.title": "Recommendations",
+  "tabs.similar": "Similar Artists",
+  "tabs.gaps": "Album Gaps",
+  "tabs.upcoming": "New & Upcoming",
+  "actions.add": "Add",
+  "actions.wanted": "Add to Wanted",
+  "actions.hide": "Hide"
+}

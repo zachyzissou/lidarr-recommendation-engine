@@ -1,0 +1,18 @@
+.discover { font-family: system-ui, sans-serif; margin: 1rem; }
+.discover header { display:flex; justify-content: space-between; align-items:center; }
+.tabs { margin: 1rem 0; }
+.tabs button { margin-right: .5rem; }
+.tabs button.active { font-weight: bold; }
+.list .item { border: 1px solid #ddd; padding: .75rem; margin-bottom: .5rem; border-radius: .25rem; }
+.item .title { font-weight: 600; }
+.item .subtitle { color: #666; font-size: .9rem; }
+.item .reason { color: #333; font-size: .9rem; margin-top: .25rem; }
+.actions button { margin-right: .5rem; }
+.container{max-width:960px;margin:16px auto;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#e6e6e6;background:#1b1b1b;padding:16px;border-radius:8px}
+.toolbar{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+#list{list-style:none;padding:0;margin:0}
+.item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #333}
+.actions button{margin-left:8px}
+button{background:#3b82f6;color:#fff;border:0;border-radius:6px;padding:6px 10px;cursor:pointer}
+button.secondary{background:#374151}
+body{background:#121212}

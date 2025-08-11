@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lidarr.Recommendations Settings</title>
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+  <main class="settings">
+    <h1>Lidarr.Recommendations</h1>
+    <section>
+      <h2>Toggles</h2>
+      <label><input type="checkbox" id="offlineOnly" /> Offline-only</label>
+      <label><input type="checkbox" id="enableListenBrainz" /> Enable ListenBrainz</label>
+      <label><input type="checkbox" id="enableMusicBrainz" /> Enable MusicBrainz</label>
+    </section>
+    <section>
+      <h2>Sliders</h2>
+      <label>Novelty <input type="range" id="novelty" min="0" max="1" step="0.01" /></label>
+      <label>Min Popularity <input type="range" id="minPopularity" min="0" max="1" step="0.01" /></label>
+    </section>
+    <section>
+      <h2>Filters</h2>
+      <label>Include Genres <input id="includeGenres" placeholder="comma,separated" /></label>
+      <label>Exclude Genres <input id="excludeGenres" placeholder="comma,separated" /></label>
+      <label>Hide live/compilations <input type="checkbox" id="hideLiveAndCompilations" /></label>
+    </section>
+    <section>
+      <h2>Behavior</h2>
+      <label><input type="checkbox" id="autoTagAccepted" /> Auto-tag accepted items</label>
+      <label><input type="checkbox" id="preferLossless" /> Prefer lossless-capable releases</label>
+    </section>
+    <section>
+      <button id="btnSave">Save</button>
+      <button id="btnRecompute">Recompute recommendations (clear cache)</button>
+      <span id="status"></span>
+    </section>
+  </main>
+  <script src="settings.js"></script>
+</body>
+</html>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Lidarr.Recommendations Settings</title>
+    <link rel="stylesheet" href="settings.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Recommendations Settings</h1>
+      <div class="section">
+        <label><input type="checkbox" id="offlineOnly" checked /> Offline-only</label>
+        <label><input type="checkbox" id="enableListenBrainz" /> Enable ListenBrainz</label>
+        <label><input type="checkbox" id="enableMusicBrainz" /> Enable MusicBrainz</label>
+      </div>
+      <div class="section">
+        <label>Novelty <input type="range" id="novelty" min="0" max="1" step="0.05" value="0.5" /></label>
+        <label>Min Popularity <input type="range" id="minPopularity" min="0" max="1" step="0.05" value="0.2" /></label>
+      </div>
+      <div class="section">
+        <button id="recompute">Recompute recommendations (clear cache)</button>
+      </div>
+    </div>
+    <script src="settings.js"></script>
+  </body>
+</html>

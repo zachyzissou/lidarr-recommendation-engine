@@ -1,0 +1,48 @@
+# Build artifacts
+artifacts/
+
+# .NET
+bin/
+obj/
+
+# VS/IDE
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+test-results/
+
+# OS
+Thumbs.db
+.DS_Store
+# Dotnet
+bin/
+obj/
+artifacts/
+*.user
+*.suo
+*.userprefs
+*.vsp
+*.psess
+*.psessx
+*.vspx
+*.coverage
+*.coveragexml
+TestResult*/
+TestResults/
+.vscode/
+.idea/
+.ReSharper*/
+*.ncrunchsolution
+*.ncrunchproject
+**/*.nupkg
+
+# Node/UI
+node_modules/
+dist/
+build/

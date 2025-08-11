@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: |
+          dotnet restore .\lidarr.recommendations.sln
+
+      - name: Build
+        run: |
+          dotnet build .\lidarr.recommendations.sln -c Release --no-restore
+
+      - name: Test
+        run: |
+          dotnet test .\tests\Lidarr.Recommendations.Tests\Lidarr.Recommendations.Tests.csproj -c Release --no-build --logger "trx;LogFileName=test-results.trx"
+
+      - name: Package
+        shell: pwsh
+        run: |
+          pwsh -File .\build\package.ps1 -Version 0.1.0
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lidarr.Recommendations-artifacts
+          path: artifacts/**

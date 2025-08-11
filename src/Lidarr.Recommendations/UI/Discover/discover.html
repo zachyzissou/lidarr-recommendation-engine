@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recommendations</title>
+  <link rel="stylesheet" href="discover.css" />
+  <script defer src="discover.js"></script>
+  </head>
+<body>
+  <main class="discover">
+    <header>
+      <h1>Recommendations</h1>
+      <select id="sort">
+        <option value="score">Score</option>
+        <option value="recency">Recency</option>
+        <option value="popularity">Popularity</option>
+        <option value="name">Name</option>
+      </select>
+    </header>
+    <nav class="tabs">
+      <button data-tab="similar" class="active">Similar Artists</button>
+      <button data-tab="gaps">Album Gaps</button>
+      <button data-tab="upcoming">New &amp; Upcoming</button>
+    </nav>
+    <section id="list" class="list"></section>
+  </main>
+</body>
+</html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Discover Recommendations</title>
+    <link rel="stylesheet" href="discover.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Recommendations</h1>
+      <div class="toolbar">
+        <select id="tab">
+          <option value="similar">Similar Artists</option>
+          <option value="gaps">Album Gaps</option>
+          <option value="upcoming">New & Upcoming</option>
+        </select>
+        <select id="sort">
+          <option value="score">Score</option>
+          <option value="recency">Recency</option>
+          <option value="popularity">Popularity</option>
+          <option value="name">Name</option>
+        </select>
+      </div>
+      <ul id="list"></ul>
+    </div>
+    <script src="discover.js"></script>
+  </body>
+</html>

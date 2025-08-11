@@ -1,0 +1,34 @@
+{
+  "id": "lidarr.recommendations",
+  "name": "Lidarr.Recommendations",
+  "version": "0.1.0",
+  "minHostVersion": "2.0.0",
+  "target": "Lidarr",
+  "entryPoint": "Lidarr.Recommendations.Plugin",
+  "capabilities": ["settings", "ui", "api", "indexer-optional"],
+  "webRoot": "UI",
+  "settings": {
+    "offlineOnly": true,
+    "enableListenBrainz": false,
+    "enableMusicBrainz": false,
+    "novelty": 0.5,
+    "minPopularity": 0.2,
+    "includeGenres": [],
+    "excludeGenres": [],
+    "includeYears": [],
+    "excludeYears": [],
+    "includeCountries": [],
+    "excludeCountries": [],
+    "hideLiveAndCompilations": true,
+    "autoTagAccepted": true,
+    "preferLossless": false,
+    "weights": {
+      "similarity": 0.4,
+      "coListen": 0.2,
+      "mbDepth": 0.2,
+      "popularity": 0.1,
+      "ownedPenalty": 0.2,
+      "excludedTagPenalty": 0.2
+    }
+  }
+}
