@@ -5,7 +5,7 @@ namespace Lidarr.Recommendations.Tests;
 /// <summary>
 /// Test data factory for creating consistent test objects
 /// </summary>
-public static class TestData
+internal static class TestData
 {
     public static ArtistProfile CreateArtist(
         string id,
